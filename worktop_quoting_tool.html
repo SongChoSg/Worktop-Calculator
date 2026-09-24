@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Song-Kitchen Worktop Calculator</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+        /* Custom print stylesheet for generating clean quotes */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .print-only {
+                display: block !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .shadow-custom {
+                box-shadow: none !important;
+                border: 1px solid #e5e7eb !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col antialiased">
+
+    <!-- Navigation Header -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-30 no-print">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Brand / Logo -->
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 bg-teal-600 rounded-lg flex items-center justify-center text-white font-bold shadow-sm">
+                        <i class="fa-solid fa-calculator text-lg"></i>
+                    </div>
+                    <span class="font-semibold text-lg text-gray-900 tracking-tight">Song-Kitchen Worktop Calculator</span>
+                </div>
+
+                <!-- Navigation Tabs -->
+                <nav class="flex space-x-2 bg-gray-100 p-1 rounded-xl">
+                    <button id="nav-calculator" onclick="switchTab('calculator')" class="px-4 py-1.5 text-sm font-medium rounded-lg transition-all shadow-sm bg-white text-teal-700">
+                        Calculator
+                    </button>
+                    <button id="nav-finishes" onclick="switchTab('finishes')" class="px-4 py-1.5 text-sm font-medium rounded-lg transition-all text-gray-600 hover:text-gray-900">
+                        Finishes
+                    </button>
+                    <button id="nav-guide" onclick="switchTab('guide')" class="px-4 py-1.5 text-sm font-medium rounded-lg transition-all text-gray-600 hover:text-gray-900 flex items-center gap-1.5">
+                        <i class="fa-solid fa-cloud-arrow-up text-teal-600"></i>
+                        <span>Free Hosting Guide</span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- ================= CALCULATOR TAB ================= -->
+        <div id="tab-calculator" class="space-y-6">
+            <!-- Main Title Section -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-2 border-b border-gray-200">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">Worktop Quoting Tool 台面报价计算器</h1>
+                    <p class="text-sm text-gray-500 mt-1">Generate instant material and fabrication quotes for kitchen worktops.</p>
+                </div>
+                <div class="flex items-center gap-2 no-print">
+                    <button onclick="copyQuoteSummary()" class="px-3.5 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 flex items-center gap-2 transition">
+                        <i class="fa-regular fa-copy text-teal-600"></i> Copy Quote
+                    </button>
+                    <button onclick="window.print()" class="px-3.5 py-2 text-sm font-medium text-white bg-teal-600 rounded-lg shadow-sm hover:bg-teal-700 flex items-center gap-2 transition">
+                        <i class="fa-solid fa-print"></i> Print / PDF
+                    </button>
+                </div>
+            </div>
+
+            <!-- Two-Column Grid Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- Left Column: Specification Form -->
+                <div class="lg:col-span-7 bg-white rounded-2xl p-6 border border-gray-200/80 shadow-sm space-y-6">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                            <span class="w-2 h-5 bg-teal-600 rounded-full inline-block"></span>
+                            Specification 规格输入
+                        </h2>
+                        <span class="text-xs bg-teal-50 text-teal-700 font-medium px-2.5 py-1 rounded-full border border-teal-200">Interactive Form</span>
+                    </div>
+
+                    <!-- Row 1: Measurement Unit & Length -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Measurement Unit -->
+                        <div>
+                            <label for="unit-select" class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">
+                                Measurement unit 计量单位
+                            </label>
+                            <select id="unit-select" onchange="calculateQuote()" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 p-2.5 outline-none transition">
+                                <option value="ft">Feet 英尺, converted from meter rate</option>
+                                <option value="m">Meters 米</option>
+                            </select>
+                        </div>
+
+                        <!-- Length -->
+                        <div>
+                            <label for="length-input" class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">
+                                Length 长度
+                            </label>
+                            <input type="number" id="length-input" value="6" min="0" step="0.1" oninput="calculateQuote()" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 p-2.5 outline-none transition" placeholder="e.g. 6">
+                            <p class="text-xs text-gray-500 mt-1">Enter the worktop length in the selected unit.</p>
+                        </div>
+                    </div>
+
+                    <!-- Surface Finish -->
+                    <div>
+                        <label for="finish-select" class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">
+                            Surface finish 表面处理
+                        </label>
+                        <select id="finish-select" onchange="calculateQuote()" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 p-2.5 outline-none transition">
+                            <option value="650" data-name="十字交叉纹 (Cross-hatch pattern)">十字交叉纹 (Cross-hatch pattern) · S$650.00/m</option>
+                            <option value="580" data-name="拉丝纹 (Brushed finish)">拉丝纹 (Brushed finish) · S$580.00/m</option>
+                            <option value="720" data-name="镜面 (Mirror polish)">镜面 (Mirror polish) · S$720.00/m</option>
+                            <option value="800" data-name="石纹哑光 (Matte Stone Pattern)">石纹哑光 (Matte Stone Pattern) · S$800.00/m</option>
+                        </select>
+                    </div>
+
+                    <!-- Fabrication Notes Section -->
+                    <div class="pt-4 border-t border-gray-100 space-y-4">
+                        <div>
+                            <h3 class="text-sm font-bold text-gray-900">Fabrication notes 加工备注</h3>
+                            <p class="text-xs text-gray-500 mt-0.5">Add extra fabrication work as a separate charge. It is included in the total quote.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-12 gap-4">
+                            <!-- Fabrication Amount -->
+                            <div class="sm:col-span-5">
+                                <label for="fabrication-input" class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">
+                                    Fabrication amount 加工费用
+                                </label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500 text-sm font-medium">S$</div>
+                                    <input type="number" id="fabrication-input" min="0" step="10" oninput="calculateQuote()" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg pl-9 p-2.5 outline-none focus:ring-teal-500 focus:border-teal-500 transition" placeholder="Example: 180">
+                                </div>
+                            </div>
+
+                            <!-- Notes -->
+                            <div class="sm:col-span-7">
+                                <label for="notes-input" class="block text-xs font-semibold text-gray-700 uppercase tracking-wider mb-1">
+                                    Notes 备注
+                                </label>
+                                <textarea id="notes-input" rows="2" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 outline-none focus:ring-teal-500 focus:border-teal-500 transition resize-none" placeholder="Example: Sink cut-out and waterfall edge"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Live Calculation Summary -->
+                <div class="lg:col-span-5 bg-white rounded-2xl p-6 border border-gray-200/80 shadow-sm space-y-5">
+                    <h2 class="text-lg font-bold text-gray-900 flex items-center gap-2">
+                        <span class="w-2 h-5 bg-teal-600 rounded-full inline-block"></span>
+                        Live calculation 实时核算
+                    </h2>
+
+                    <!-- Hero Display Box (Light Blue / Teal tint matching screenshot) -->
+                    <div class="bg-teal-50/70 border border-teal-100 rounded-2xl p-6 text-center space-y-2">
+                        <p class="text-xs font-medium text-teal-800 uppercase tracking-wide">
+                            Estimated quote (before GST) 预估报价 (未含GST)
+                        </p>
+                        <div id="hero-total" class="text-3xl sm:text-4xl font-extrabold text-teal-900 tracking-tight">
+                            S$1,189.50
+                        </div>
+                        <p id="hero-summary" class="text-xs text-teal-700 font-medium">
+                            6 ft · 十字交叉纹 (Cross-hatch pattern)
+                        </p>
+                    </div>
+
+                    <!-- Detailed Breakdown List -->
+                    <div class="divide-y divide-gray-100 text-sm space-y-3 pt-1">
+                        <div class="flex justify-between items-center pt-2">
+                            <span class="text-gray-600">Material estimate 材料预估</span>
+                            <span id="breakdown-material" class="font-semibold text-gray-900">S$1,189.50</span>
+                        </div>
+
+                        <div class="flex justify-between items-center pt-3">
+                            <span class="text-gray-600">Fabrication 加工费用</span>
+                            <span id="breakdown-fabrication" class="font-semibold text-gray-900">S$0.00</span>
+                        </div>
+
+                        <div class="flex justify-between items-center pt-3">
+                            <span class="text-gray-600">GST (9%) 消费税</span>
+                            <span id="breakdown-gst" class="font-semibold text-gray-900">S$107.06</span>
+                        </div>
+
+                        <div class="flex justify-between items-start pt-3">
+                            <span class="text-xs text-gray-500">Calculation 公式</span>
+                            <span class="text-xs text-gray-500 text-right font-mono">Length × rate + fabrication, then GST</span>
+                        </div>
+
+                        <!-- Highlighted Final Total Card -->
+                        <div class="bg-gray-50 rounded-xl p-4 flex justify-between items-center mt-4 border border-gray-200">
+                            <span class="font-bold text-gray-900 text-sm sm:text-base">
+                                Estimated quote (incl. GST)<br>
+                                <span class="text-xs font-normal text-gray-500">预估报价 (含GST)</span>
+                            </span>
+                            <span id="breakdown-final" class="text-xl sm:text-2xl font-bold text-teal-700">
+                                S$1,296.56
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Customer Notes Summary for Printing/Exporting -->
+                    <div id="notes-display-container" class="hidden text-xs bg-amber-50 border border-amber-200 text-amber-800 rounded-lg p-3">
+                        <span class="font-semibold block mb-0.5"><i class="fa-solid fa-clipboard-list mr-1"></i> Special Instructions:</span>
+                        <span id="notes-display-text" class="italic"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================= FINISHES TAB ================= -->
+        <div id="tab-finishes" class="hidden space-y-6">
+            <div class="pb-2 border-b border-gray-200">
+                <h1 class="text-2xl font-bold text-gray-900">Available Surface Finishes 表面处理选择</h1>
+                <p class="text-sm text-gray-500 mt-1">Explore our high-grade stainless steel & stone finish options for custom kitchen worktops.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Finish Card 1 -->
+                <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition">
+                    <div class="h-40 bg-gradient-to-tr from-slate-300 via-gray-100 to-slate-200 flex items-center justify-center relative">
+                        <!-- Custom Pattern Representation -->
+                        <div class="absolute inset-0 opacity-20" style="background-image: repeating-linear-gradient(45deg, #000 0, #000 1px, transparent 0, transparent 10px), repeating-linear-gradient(-45deg, #000 0, #000 1px, transparent 0, transparent 10px);"></div>
+                        <span class="text-xs font-bold bg-white/90 text-gray-800 px-3 py-1 rounded-full shadow-sm z-10">Cross-Hatch</span>
+                    </div>
+                    <div class="p-5 space-y-3">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-gray-900">十字交叉纹</h3>
+                            <span class="text-teal-700 font-bold text-sm">S$650.00 / m</span>
+                        </div>
+                        <p class="text-xs text-gray-600 leading-relaxed">
+                            Features a subtle woven textured texture that minimizes scratch visibility and fingerprint smudges. Ideal for high-use family kitchens.
+                        </p>
+                        <button onclick="selectFinishAndSwitch('650')" class="w-full py-2 bg-gray-100 hover:bg-teal-50 hover:text-teal-700 text-gray-700 rounded-lg text-xs font-semibold transition">
+                            Select for Quote
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Finish Card 2 -->
+                <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition">
+                    <div class="h-40 bg-gradient-to-r from-gray-200 via-gray-400 to-gray-300 flex items-center justify-center relative">
+                        <div class="absolute inset-0 opacity-25" style="background-image: repeating-linear-gradient(0deg, #000 0, #000 1px, transparent 0, transparent 3px);"></div>
+                        <span class="text-xs font-bold bg-white/90 text-gray-800 px-3 py-1 rounded-full shadow-sm z-10">Brushed Steel</span>
+                    </div>
+                    <div class="p-5 space-y-3">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-gray-900">拉丝纹</h3>
+                            <span class="text-teal-700 font-bold text-sm">S$580.00 / m</span>
+                        </div>
+                        <p class="text-xs text-gray-600 leading-relaxed">
+                            Classic satin brushed grain direction providing a sleek commercial kitchen aesthetics. Easy to maintain and clean.
+                        </p>
+                        <button onclick="selectFinishAndSwitch('580')" class="w-full py-2 bg-gray-100 hover:bg-teal-50 hover:text-teal-700 text-gray-700 rounded-lg text-xs font-semibold transition">
+                            Select for Quote
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Finish Card 3 -->
+                <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition">
+                    <div class="h-40 bg-gradient-to-tr from-gray-100 via-white to-gray-300 flex items-center justify-center relative">
+                        <div class="w-20 h-20 rounded-full bg-white/50 backdrop-blur-md shadow-lg border border-white/60"></div>
+                        <span class="text-xs font-bold bg-white/90 text-gray-800 px-3 py-1 rounded-full shadow-sm z-10 absolute">Mirror Polish</span>
+                    </div>
+                    <div class="p-5 space-y-3">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-gray-900">镜面</h3>
+                            <span class="text-teal-700 font-bold text-sm">S$720.00 / m</span>
+                        </div>
+                        <p class="text-xs text-gray-600 leading-relaxed">
+                            Ultra-reflective high shine finish. Enhances ambient lighting and adds a luxurious contemporary feel to modern island counters.
+                        </p>
+                        <button onclick="selectFinishAndSwitch('720')" class="w-full py-2 bg-gray-100 hover:bg-teal-50 hover:text-teal-700 text-gray-700 rounded-lg text-xs font-semibold transition">
+                            Select for Quote
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= FREE HOSTING GUIDE TAB ================= -->
+        <div id="tab-guide" class="hidden space-y-6">
+            <div class="pb-2 border-b border-gray-200">
+                <h1 class="text-2xl font-bold text-gray-900">How to Host & Deploy This Website 100% Free</h1>
+                <p class="text-sm text-gray-500 mt-1">Step-by-step methods to publish this calculator tool online without paying for web hosting.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Option 1: Vercel / Netlify -->
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-black text-white flex items-center justify-center text-lg font-bold">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-900">Option 1: Vercel or Netlify</h3>
+                    <p class="text-xs text-gray-600 leading-relaxed">
+                        Fastest way to get a live <code class="bg-gray-100 px-1 rounded text-red-600">https://yourname.vercel.app</code> website.
+                    </p>
+                    <ol class="text-xs text-gray-600 space-y-2 list-decimal list-inside font-medium pt-2">
+                        <li>Save this file as <code class="bg-gray-100 px-1 rounded text-gray-800">index.html</code></li>
+                        <li>Create a free account at <a href="https://vercel.com" target="_blank" class="text-teal-600 underline">Vercel.com</a> or <a href="https://netlify.com" target="_blank" class="text-teal-600 underline">Netlify.com</a></li>
+                        <li>Drag and drop the folder containing <code class="bg-gray-100 px-1 rounded">index.html</code></li>
+                        <li>Your website is instant live with HTTPS!</li>
+                    </ol>
+                </div>
+
+                <!-- Option 2: GitHub Pages -->
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-gray-800 text-white flex items-center justify-center text-lg">
+                        <i class="fa-brands fa-github"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-900">Option 2: GitHub Pages</h3>
+                    <p class="text-xs text-gray-600 leading-relaxed">
+                        Free unlimited static web hosting directly from your code repository.
+                    </p>
+                    <ol class="text-xs text-gray-600 space-y-2 list-decimal list-inside font-medium pt-2">
+                        <li>Sign up on <a href="https://github.com" target="_blank" class="text-teal-600 underline">GitHub.com</a></li>
+                        <li>Create a public repository (e.g. <code class="bg-gray-100 px-1 rounded">worktop-calculator</code>)</li>
+                        <li>Upload this <code class="bg-gray-100 px-1 rounded">index.html</code> file</li>
+                        <li>Go to <strong>Settings &gt; Pages</strong>, select <code class="bg-gray-100 px-1 rounded">main branch</code> and click Save!</li>
+                    </ol>
+                </div>
+
+                <!-- Option 3: Embed in Google Sites or Canva -->
+                <div class="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm space-y-3">
+                    <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg">
+                        <i class="fa-brands fa-google"></i>
+                    </div>
+                    <h3 class="font-bold text-gray-900">Option 3: Embed in Google Sites</h3>
+                    <p class="text-xs text-gray-600 leading-relaxed">
+                        If you already use Google Sites or Canva to present your business:
+                    </p>
+                    <ol class="text-xs text-gray-600 space-y-2 list-decimal list-inside font-medium pt-2">
+                        <li>Host <code class="bg-gray-100 px-1 rounded">index.html</code> via Vercel or GitHub Pages (Option 1/2).</li>
+                        <li>Open your <strong>Google Site</strong> editor.</li>
+                        <li>Click <strong>Embed</strong> &gt; paste your live URL or paste the raw HTML code into the Embed Box.</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-gray-900 text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-teal-400"></i>
+        <span id="toast-message" class="text-xs font-medium">Copied to clipboard!</span>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Tab Switcher Logic
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.getElementById('tab-calculator').classList.add('hidden');
+            document.getElementById('tab-finishes').classList.add('hidden');
+            document.getElementById('tab-guide').classList.add('hidden');
+
+            // Reset navigation styles
+            const navBtnIds = ['nav-calculator', 'nav-finishes', 'nav-guide'];
+            navBtnIds.forEach(id => {
+                const btn = document.getElementById(id);
+                btn.className = "px-4 py-1.5 text-sm font-medium rounded-lg transition-all text-gray-600 hover:text-gray-900";
+            });
+
+            // Activate target tab
+            document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`nav-${tabName}`);
+            activeBtn.className = "px-4 py-1.5 text-sm font-medium rounded-lg transition-all shadow-sm bg-white text-teal-700";
+        }
+
+        // Quick select finish from gallery tab
+        function selectFinishAndSwitch(rateValue) {
+            const finishSelect = document.getElementById('finish-select');
+            finishSelect.value = rateValue;
+            switchTab('calculator');
+            calculateQuote();
+        }
+
+        // Main Calculation Function
+        function calculateQuote() {
+            // 1. Get Form Inputs
+            const unit = document.getElementById('unit-select').value;
+            const lengthInput = parseFloat(document.getElementById('length-input').value) || 0;
+            const finishSelect = document.getElementById('finish-select');
+            const ratePerMeter = parseFloat(finishSelect.value) || 0;
+            const finishName = finishSelect.options[finishSelect.selectedIndex].getAttribute('data-name');
+            const fabricationInput = parseFloat(document.getElementById('fabrication-input').value) || 0;
+            const notesInput = document.getElementById('notes-input').value.trim();
+
+            // 2. Unit Conversion: Conversion factor (1 meter = 3.28084 feet)
+            let lengthInMeters = lengthInput;
+            if (unit === 'ft') {
+                lengthInMeters = lengthInput / 3.28084;
+            }
+
+            // 3. Compute Financial Breakdown
+            const materialTotal = lengthInMeters * ratePerMeter;
+            const totalBeforeGst = materialTotal + fabricationInput;
+            const gstAmount = totalBeforeGst * 0.09; // 9% GST standard
+            const finalTotal = totalBeforeGst + gstAmount;
+
+            // 4. Helper currency formatter
+            const formatCurrency = (amount) => `S$${amount.toLocaleString('en-SG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+            // 5. Update UI Displays
+            document.getElementById('hero-total').innerText = formatCurrency(totalBeforeGst);
+            document.getElementById('hero-summary').innerText = `${lengthInput} ${unit} · ${finishName}`;
+
+            document.getElementById('breakdown-material').innerText = formatCurrency(materialTotal);
+            document.getElementById('breakdown-fabrication').innerText = formatCurrency(fabricationInput);
+            document.getElementById('breakdown-gst').innerText = formatCurrency(gstAmount);
+            document.getElementById('breakdown-final').innerText = formatCurrency(finalTotal);
+
+            // Handle Notes Display Box
+            const notesContainer = document.getElementById('notes-display-container');
+            const notesText = document.getElementById('notes-display-text');
+            if (notesInput) {
+                notesText.innerText = notesInput;
+                notesContainer.classList.remove('hidden');
+            } else {
+                notesContainer.classList.add('hidden');
+            }
+        }
+
+        // Copy Quote Summary Function
+        function copyQuoteSummary() {
+            const unit = document.getElementById('unit-select').value;
+            const lengthInput = document.getElementById('length-input').value;
+            const finishSelect = document.getElementById('finish-select');
+            const finishName = finishSelect.options[finishSelect.selectedIndex].getAttribute('data-name');
+            const notes = document.getElementById('notes-input').value;
+
+            const material = document.getElementById('breakdown-material').innerText;
+            const fabrication = document.getElementById('breakdown-fabrication').innerText;
+            const gst = document.getElementById('breakdown-gst').innerText;
+            const beforeGst = document.getElementById('hero-total').innerText;
+            const total = document.getElementById('breakdown-final').innerText;
+
+            const summaryText = 
+`--- SONG-KITCHEN WORKTOP QUOTE ---
+Specification: ${lengthInput} ${unit} | ${finishName}
+${notes ? `Notes: ${notes}\n` : ''}
+Material Estimate: ${material}
+Fabrication Fee: ${fabrication}
+Subtotal (before GST): ${beforeGst}
+GST (9%): ${gst}
+----------------------------------
+TOTAL QUOTE (incl. GST): ${total}
+----------------------------------`;
+
+            // Clipboard copy with fallback mechanism
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(summaryText).then(() => {
+                    showToast("Quote summary copied to clipboard!");
+                });
+            } else {
+                const textArea = document.createElement("textarea");
+                textArea.value = summaryText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showToast("Quote summary copied to clipboard!");
+                } catch (err) {
+                    showToast("Failed to copy quote.", true);
+                }
+                document.body.removeChild(textArea);
+            }
+        }
+
+        // Toast Notification System
+        function showToast(message, isError = false) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            const toastIcon = document.getElementById('toast-icon');
+
+            toastMsg.innerText = message;
+            toastIcon.className = isError ? "fa-solid fa-circle-exclamation text-red-400" : "fa-solid fa-circle-check text-teal-400";
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        // Initialize calculation on load & bind notes listener
+        window.addEventListener('DOMContentLoaded', () => {
+            calculateQuote();
+            document.getElementById('notes-input').addEventListener('input', calculateQuote);
+        });
+    </script>
+</body>
+</html>
