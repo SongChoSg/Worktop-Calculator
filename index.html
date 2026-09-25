@@ -106,7 +106,7 @@
                                 Measurement unit 计量单位
                             </label>
                             <select id="unit-select" onchange="calculateQuote()" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 p-2.5 outline-none transition">
-                                <option value="ft">Feet 英尺, converted from meter rate</option>
+                                <option value="ft">Feet 英尺</option>
                                 <option value="m">Meters 米</option>
                             </select>
                         </div>
@@ -127,10 +127,14 @@
                             Surface finish 表面处理
                         </label>
                         <select id="finish-select" onchange="calculateQuote()" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-teal-500 focus:border-teal-500 p-2.5 outline-none transition">
+                            <option value="650" data-name="雪晶钢 (Snowflake-textured)">雪晶钢 (Snowflake-textured) · S$650.00/m</option>
+                            <option value="650" data-name="雨星纹 (Rain-drop pattern)">雨星纹 (Rain-drop pattern) · S$650.00/m</option>
+                            <option value="650" data-name="柳条雨星纹 (Rain-drop pattern)">柳条雨星纹 (Rain-drop pattern) · S$650.00/m</option>
+                            <option value="650" data-name="小砂纹, 钛金钢 (Fine sand pattern, titanium-coated SS)">小砂纹, 钛金钢 (Fine sand pattern, titanium-coated SS) · S$650.00/m</option>
                             <option value="650" data-name="十字交叉纹 (Cross-hatch pattern)">十字交叉纹 (Cross-hatch pattern) · S$650.00/m</option>
-                            <option value="580" data-name="拉丝纹 (Brushed finish)">拉丝纹 (Brushed finish) · S$580.00/m</option>
-                            <option value="720" data-name="镜面 (Mirror polish)">镜面 (Mirror polish) · S$720.00/m</option>
-                            <option value="800" data-name="石纹哑光 (Matte Stone Pattern)">石纹哑光 (Matte Stone Pattern) · S$800.00/m</option>
+                            <option value="580" data-name="冰裂纹 (Cracked ice pattern)">冰裂纹 (Cracked ice pattern) · S$1200.00/m</option>
+                            <option value="720" data-name="皮革纹 (Leather grain pattern)">皮革纹 (Leather grain pattern) · S$1200.00/m</option>
+                            <option value="800" data-name="火山岩纹 (Volcanic rock pattern)">火山岩纹 (Volcanic rock pattern) · S$1200.00/m</option>
                         </select>
                     </div>
 
