@@ -253,7 +253,7 @@
                         <p class="text-xs text-gray-600 leading-relaxed">
                             Features a subtle woven textured texture that minimizes scratch visibility and fingerprint smudges. Ideal for high-use family kitchens.
                         </p>
-                        <button onclick="selectFinishAndSwitch('650')" class="w-full py-2 bg-gray-100 hover:bg-teal-50 hover:text-teal-700 text-gray-700 rounded-lg text-xs font-semibold transition">
+                        <button onclick="selectFinishAndSwitch('雪晶钢 (Snowflake-textured)')" class="w-full py-2 bg-gray-100 hover:bg-teal-50 hover:text-teal-700 text-gray-700 rounded-lg text-xs font-semibold transition">
                             Select for Quote
                         </button>
                     </div>
@@ -274,7 +274,7 @@
                         <p class="text-xs text-gray-600 leading-relaxed">
                             Features a subtle woven textured texture that minimizes scratch visibility and fingerprint smudges. Ideal for high-use family kitchens.
                         </p>
-                        <button onclick="selectFinishAndSwitch('650')" class="w-full py-2 bg-gray-100 hover:bg-teal-50 hover:text-teal-700 text-gray-700 rounded-lg text-xs font-semibold transition">
+                        <button onclick="selectFinishAndSwitch('钛金钢 (Fine sand pattern, titanium-coated SS)')" class="w-full py-2 bg-gray-100 hover:bg-teal-50 hover:text-teal-700 text-gray-700 rounded-lg text-xs font-semibold transition">
                             Select for Quote
                         </button>
                     </div>
@@ -294,7 +294,7 @@
                         <p class="text-xs text-gray-600 leading-relaxed">
                             Features a subtle woven textured texture that minimizes scratch visibility and fingerprint smudges. Ideal for high-use family kitchens.
                         </p>
-                        <button onclick="selectFinishAndSwitch('650')" class="w-full py-2 bg-gray-100 hover:bg-teal-50 hover:text-teal-700 text-gray-700 rounded-lg text-xs font-semibold transition">
+                        <button onclick="selectFinishAndSwitch('十字交叉纹 (Cross-hatch pattern)')" class="w-full py-2 bg-gray-100 hover:bg-teal-50 hover:text-teal-700 text-gray-700 rounded-lg text-xs font-semibold transition">
                             Select for Quote
                         </button>
                     </div>
@@ -314,7 +314,7 @@
                         <p class="text-xs text-gray-600 leading-relaxed">
                             Features a subtle woven textured texture that minimizes scratch visibility and fingerprint smudges. Ideal for high-use family kitchens.
                         </p>
-                        <button onclick="selectFinishAndSwitch('1200')" class="w-full py-2 bg-gray-100 hover:bg-teal-50 hover:text-teal-700 text-gray-700 rounded-lg text-xs font-semibold transition">
+                        <button onclick="selectFinishAndSwitch('冰裂纹 (Cracked ice pattern)')" class="w-full py-2 bg-gray-100 hover:bg-teal-50 hover:text-teal-700 text-gray-700 rounded-lg text-xs font-semibold transition">
                             Select for Quote
                         </button>
                     </div>
@@ -333,7 +333,7 @@
                         <p class="text-xs text-gray-600 leading-relaxed">
                             Ultra-reflective high shine finish. Enhances ambient lighting and adds a luxurious contemporary feel to modern island counters.
                         </p>
-                        <button onclick="selectFinishAndSwitch('1200')" class="w-full py-2 bg-gray-100 hover:bg-teal-50 hover:text-teal-700 text-gray-700 rounded-lg text-xs font-semibold transition">
+                        <button onclick="selectFinishAndSwitch('火山岩纹 (Volcanic rock pattern)')" class="w-full py-2 bg-gray-100 hover:bg-teal-50 hover:text-teal-700 text-gray-700 rounded-lg text-xs font-semibold transition">
                             Select for Quote
                         </button>
                     </div>
@@ -432,9 +432,14 @@
         }
 
         // Quick select finish from gallery tab
-        function selectFinishAndSwitch(rateValue) {
+        function selectFinishAndSwitch(finishName) {
             const finishSelect = document.getElementById('finish-select');
-            finishSelect.value = rateValue;
+            for (let i = 0; i < finishSelect.options.length; i++) {
+                if (finishSelect.options[i].getAttribute('data-name') === finishName) {
+                    finishSelect.selectedIndex = i;
+                    break;
+                }
+            }
             switchTab('calculator');
             calculateQuote();
         }
